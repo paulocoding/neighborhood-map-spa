@@ -1,37 +1,35 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Neighborhood Map</title>
-        <meta name="description" content="A single page app ">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- CSS files -->
-        <link href="https://fonts.googleapis.com/css?family=Roboto:600|Source+Sans+Pro" rel="stylesheet">
-        <link rel="stylesheet" href="css/main.css">
-    </head>
-    <body>
-        <header>
-          <h1>Neighborhood Map</h1>
-        </header>
-        <main>
-          <div class="list">
-            <input type="text" name="" value="" class="filter" placeholder="Type to Filter">
-            <ul>
-              <li>I'm an item</li>
-              <li>I'm an item</li>
-              <li>I'm an item</li>
-              <li>I'm an item</li>
-              <li>I'm an item</li>
-              <li>I'm an item</li>
-            </ul>
-          </div>
-          <div class="map">asd</div>
-        </main>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Neighborhood Map</title>
+    <meta name="description" content="A single page app ">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS files -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:600|Source+Sans+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <main>
+      <div class="list">
+        <input type="text" name="" value="" class="filter" placeholder="Type to Filter">
+        <ul>
+          <li>I'm an item</li>
+          <li>I'm an item</li>
+          <li>I'm an item</li>
+          <li>I'm an item</li>
+          <li>I'm an item</li>
+          <li>I'm an item</li>
+        </ul>
+      </div>
+      <div id="map"></div>
+    </main>
 
-        <!-- javascript files -->
-        <script src="js/vendor/jquery-3.1.1.min.js"></script>
-        <script src="js/vendor/knockout-3.4.1.js"></script>
-        <script src="js/main.js"></script>
-    </body>
+    <!-- javascript files -->
+    <script src="js/vendor/jquery-3.1.1.min.js"></script>
+    <script src="js/vendor/knockout-3.4.1.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKwcsMyFm4u10mjKrerIICpsDnYbLmCHU&callback=initMap" async defer></script>
+  </body>
 </html>

@@ -92,19 +92,12 @@ h1, h2, h3, h4, h5, h6 {
 html, body {
   margin: 0;
   padding: 0;
-}
-header {
-  background-color: #222;
-  padding: 20px;
-  margin: 0;
-}
-h1 {
-  color: #fff;
-  font-size: 40px;
-  font-weight: 100;
+  height: 100%;
 }
 main {
   display: block;
+  margin: 0;
+  padding: 0;
   height: 100%;
 }
 div.list {
@@ -115,9 +108,7 @@ div.list {
   height: 100%;
   width: 250px;
 }
-div.map {
-  display: block;
-  float: right;
+#map {
   height: 100%;
 }
 div.list input.filter {
