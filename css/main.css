@@ -14,6 +14,7 @@ html {
     color: #222;
     font-size: 1em;
     line-height: 1.4;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 /*
@@ -25,12 +26,14 @@ html {
  */
 
 ::-moz-selection {
-    background: #b3d4fc;
+    background: #4e4e4e;
+    color: #b8c7d1;
     text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
+    background: #4e4e4e;
+    color: #b8c7d1;
     text-shadow: none;
 }
 
@@ -81,23 +84,84 @@ textarea {
 }
 
 /* ==========================================================================
-   Browser Upgrade Prompt
-   ========================================================================== */
-
-.browserupgrade {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
-}
-
-/* ==========================================================================
    Author's custom styles
    ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+}
+header {
+  background-color: #222;
+  padding: 20px;
+  margin: 0;
+}
+h1 {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 100;
+}
+main {
+  display: block;
+  height: 100%;
+}
+div.list {
+  background-color: #222;
+  color: #b6b6b6;
+  display: block;
+  float: left;
+  height: 100%;
+  width: 250px;
+}
+div.map {
+  display: block;
+  float: right;
+  height: 100%;
+}
+div.list input.filter {
+  outline: none;
+  box-sizing: border-box;
+  background-color: #ddd;
+  color: #222;
+  border: none;
+  border-bottom: 2px solid #6f6f6f;
+  font-size: 26px;
+  width: 100%;
+  padding: 6px 6px 6px 12px;
+}
+div.list input.filter:focus {
+  border-bottom: 2px solid #aaa;
+  background-color: #fff;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #6b6b6b;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #6b6b6b;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #6b6b6b;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #6b6b6b;
+}
 
+div.list ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-
-
+div.list li {
+  font-size: 20px;
+  padding: 10px 15px;
+}
+div.list li:hover{
+  color: #fff;
+  background-color: #555;
+  cursor: pointer;
+}
 
 
 
