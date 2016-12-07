@@ -13,14 +13,9 @@
   <body>
     <main>
       <div class="list">
-        <input type="text" name="" value="" class="filter" placeholder="Type to Filter">
-        <ul>
-          <li>I'm an item</li>
-          <li>I'm an item</li>
-          <li>I'm an item</li>
-          <li>I'm an item</li>
-          <li>I'm an item</li>
-          <li>I'm an item</li>
+        <input type="text" name="" value="" class="filter" placeholder="Type to Filter" data-bind="value: query, valueUpdate: 'keyup', event: { keyup: filterArray}">
+        <ul data-bind="foreach: filteredList">
+          <li data-bind="text: name"></li>
         </ul>
       </div>
       <div id="map"></div>

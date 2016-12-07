@@ -69,15 +69,17 @@ $(function(){
     return url;
   }
 
-  function getFoursquareList(){
+  // gets locations from foursquare using an ajax json call
+  // and pushes them to the given lists
+  // locationList serves as cache
+  // filteredList serves as view model list
+  function getFoursquareList(locationList, filteredList){
     var foursquareUrl = foursquareJsonUrl(ClientID, ClientSecret,
                                           mapcenter.lat, mapcenter.lng,
                                           1000, 10);
     // json call
-    var locationList = [];
     $.getJSON(foursquareUrl, function(data){
       data.response.venues.forEach(function(el){
-        // console.log(el);
         var location = {};
         location.name = el.name;
 
@@ -108,9 +110,44 @@ $(function(){
         location.lng = el.location.lng;
 
         locationList.push(location);
+        filteredList.push(location);
       });
+    }).fail(function() {
+      // TO DO: handle error
+      console.log( 'An error ocurred' );
     });
-    return locationList;
   }
-  // console.log(getFoursquareList());
+
+  // Knockout
+  // Models
+  var locations = {
+    locationList: ko.observableArray([]),
+    filteredList: ko.observableArray([]),
+    get: function(){
+      getFoursquareList(this.locationList, this.filteredList);
+    },
+    filter: function(filter){
+      self = this;
+      self.filteredList.removeAll();
+      self.locationList().forEach(function(el){
+        if(el.name.toLowerCase().indexOf(filter) > -1){
+          self.filteredList.push(el);
+        }
+      });
+    }
+  };
+
+  // View Model
+  var ViewModel = function(){
+    var self = this;
+    self.locations = locations;
+    self.filteredList = locations.filteredList;
+    self.locations.get(); // makes the JSON call to get locations info
+    self.query = ko.observable('');
+    self.filterArray = function(){
+      var filter = self.query().toLowerCase();
+      self.locations.filter(filter);
+    };
+  };
+  ko.applyBindings( new ViewModel());
 });
