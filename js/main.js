@@ -14,6 +14,12 @@ function initMap() {
 // main app
 $(function(){
 
+  function markerAnim(marker){
+    marker.infowindow.open(map, marker);
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){marker.setAnimation(null);}, 1400);
+  }
+  // Creates markers on the map for given item
   function createMarker(item){
     var marker = new google.maps.Marker({
       position: {lat: item.lat, lng: item.lng},
@@ -33,11 +39,9 @@ $(function(){
         content: contentString,
         maxWidth: 360
       });
-
+      marker.infowindow = infowindow;
       marker.addListener('click', function() {
-        infowindow.open(map, marker);
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function(){marker.setAnimation(null);}, 1400);
+        markerAnim(marker);
       });
   }
 
