@@ -1,4 +1,4 @@
-// setting up google map
+// setting up google maps
 var map;
 var mapcenter = {lat: 53.349858, lng: -6.260325};
 function initMap() {
@@ -12,7 +12,8 @@ function initMap() {
     map: map
   });
 
-  var contentString =             '</div>'+
+  // info window
+  var contentString = '</div>'+
             '<h1 id="firstHeading" class="firstHeading">The Spire</h1>'+
             '<div id="bodyContent">'+
             '<p>The Spire of Dublin, alternatively titled the Monument of Light is a large...</p>';
@@ -30,37 +31,40 @@ function initMap() {
 }
 
 $(function(){
+  // date format Helper
+  function getCurrDate(){
+      // getting the current date
+      // and formating it to the foursquare standard YYYYMMDD
+      var d = new Date();
+      var curr_day = d.getDate();
+      if (curr_day < 10){
+        curr_day = '0' + curr_day.toString();
+      } else {
+        curr_day = curr_day.toString();
+      }
+      var curr_month = d.getMonth()+1;
+      if (curr_month < 10){
+        curr_month = '0' + curr_month.toString();
+      } else {
+        curr_month = curr_month.toString();
+      }
+      var curr_year = d.getFullYear();
+      var dateformated = curr_year + curr_month + curr_day;
+      return dateformated;
+  }
 
-  // foursquare
+  // foursquare api
   var ClientID = 'W3HFAQKBHHUMH5DHJNSXUR4RQFXLTVGVHJA4ODOMYWSZCJQT';
   var ClientSecret = 'RINKPCMKRQFYL0FR04SZJE5CMPWYT315DQDXRSCGOSQB4FKX';
   function foursquareJsonUrl(id, secret, lat, lng, radius, limit){
-
-    // getting the current date in the right format
-    var d = new Date();
-    var curr_day = d.getDate();
-    if (curr_day < 10){
-      curr_day = '0' + curr_day.toString();
-    } else {
-      curr_day = curr_day.toString();
-    }
-    var curr_month = d.getMonth()+1;
-    if (curr_month < 10){
-      curr_month = '0' + curr_month.toString();
-    } else {
-      curr_month = curr_month.toString();
-    }
-    var curr_year = d.getFullYear();
-    var dateformated = '' + curr_year + curr_month + curr_day;
 
     url = 'https://api.foursquare.com/v2/venues/search?ll='+ lat+','+ lng+
           '&radius='+ radius+
           '&limit='+ limit+
           '&client_id='+ id+
           '&client_secret='+secret+
-          '&v='+dateformated;
+          '&v='+ getCurrDate();
     return url;
   }
-
   console.log(foursquareJsonUrl(ClientID, ClientSecret, mapcenter.lat, mapcenter.lng, 10, 10));
 });
