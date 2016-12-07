@@ -1,9 +1,9 @@
 // setting up google maps
 var map;
-var mapcenter = {lat: 53.349858, lng: -6.260325};
+var mapcenter = {lat: 53.349807, lng: -6.260225};
 function initMap() {
-  var spire = {lat: 53.349858, lng: -6.260325};
-  var map = new google.maps.Map(document.getElementById('map'), {
+  var spire = {lat: 53.349807, lng: -6.260225};
+  map = new google.maps.Map(document.getElementById('map'), {
     zoom: 18,
     center: spire
   });
@@ -30,7 +30,9 @@ function initMap() {
     });
 }
 
+// main app
 $(function(){
+
   // date format Helper
   function getCurrDate(){
       // getting the current date
@@ -66,5 +68,49 @@ $(function(){
           '&v='+ getCurrDate();
     return url;
   }
-  console.log(foursquareJsonUrl(ClientID, ClientSecret, mapcenter.lat, mapcenter.lng, 10, 10));
+
+  function getFoursquareList(){
+    var foursquareUrl = foursquareJsonUrl(ClientID, ClientSecret,
+                                          mapcenter.lat, mapcenter.lng,
+                                          1000, 10);
+    // json call
+    var locationList = [];
+    $.getJSON(foursquareUrl, function(data){
+      data.response.venues.forEach(function(el){
+        // console.log(el);
+        var location = {};
+        location.name = el.name;
+
+        if (el.categories[0]){
+          location.category = el.categories[0].name;
+        } else {
+          location.category = 'No category';
+        }
+
+        if (el.location.address){
+          location.address = el.location.address;
+        } else {
+          location.address = '-';
+        }
+
+        if (el.location.city){
+          location.city = el.location.city;
+        } else {
+          location.city = '-';
+        }
+
+        if (el.location.country){
+          location.country = el.location.country;
+        } else {
+          location.country = '-';
+        }
+        location.lat = el.location.lat;
+        location.lng = el.location.lng;
+
+        locationList.push(location);
+      });
+    });
+    return locationList;
+  }
+  // console.log(getFoursquareList());
 });
