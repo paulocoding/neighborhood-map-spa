@@ -4,34 +4,42 @@ var mapcenter = {lat: 53.349807, lng: -6.260225};
 function initMap() {
   var spire = {lat: 53.349807, lng: -6.260225};
   map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 18,
+    zoom: 17,
     center: spire
   });
-  var marker = new google.maps.Marker({
-    position: spire,
-    map: map
-  });
-
-  // info window
-  var contentString = '</div>'+
-            '<h1 id="firstHeading" class="firstHeading">The Spire</h1>'+
-            '<div id="bodyContent">'+
-            '<p>The Spire of Dublin, alternatively titled the Monument of Light is a large...</p>';
-
-    var infowindow = new google.maps.InfoWindow({
-      content: contentString,
-      maxWidth: 360
-    });
-
-    marker.addListener('click', function() {
-      infowindow.open(map, marker);
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function(){marker.setAnimation(null);}, 1400);
-    });
 }
+
+
 
 // main app
 $(function(){
+
+  function createMarker(item){
+    var marker = new google.maps.Marker({
+      position: {lat: item.lat, lng: item.lng},
+      map: map
+    });
+
+    // info window
+    var contentString = '</div>'+
+              '<h1 id="firstHeading" class="firstHeading">'+item.name+'</h1>'+
+              '<div id="bodyContent">'+
+              '<p>'+item.category+'</p>'+
+              '<p>'+item.address+'</p>'+
+              '<p>'+item.city+'</p>'+
+              '<p>'+item.country+'</p>';
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        maxWidth: 360
+      });
+
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function(){marker.setAnimation(null);}, 1400);
+      });
+  }
 
   // date format Helper
   function getCurrDate(){
@@ -76,7 +84,7 @@ $(function(){
   function getFoursquareList(locationList, filteredList){
     var foursquareUrl = foursquareJsonUrl(ClientID, ClientSecret,
                                           mapcenter.lat, mapcenter.lng,
-                                          1000, 10);
+                                          10000, 10);
     // json call
     $.getJSON(foursquareUrl, function(data){
       data.response.venues.forEach(function(el){
@@ -111,6 +119,7 @@ $(function(){
 
         locationList.push(location);
         filteredList.push(location);
+        createMarker(location);
       });
     }).fail(function() {
       // TO DO: handle error
