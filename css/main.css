@@ -156,6 +156,14 @@ div.list li:hover{
   cursor: pointer;
 }
 
+section.wiki {
+  position: absolute;
+  background-color: #fff;
+  bottom: 0;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  width: 100%;
+}
 
 
 

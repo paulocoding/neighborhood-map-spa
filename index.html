@@ -19,6 +19,13 @@
         </ul>
       </div>
       <div id="map"></div>
+      <section class="wiki">
+        <article class="wiki-article">
+          <h2 data-bind="text: wikiArticle.titles"></h2>
+          <p data-bind="text: wikiArticle.articles">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+          <a href="" data-bind="text: wikiArticle.urls, attr: {href: wikiArticle.urls()[0]}">wikipedia link</a>
+        </article>
+      </section>
     </main>
 
     <!-- javascript files -->

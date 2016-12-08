@@ -175,9 +175,6 @@ $(function(){
             var urls = response[3];
             wikiArticle.update(titles, articles, urls);
             clearTimeout(wikiRequestTimeout);
-            console.log(wikiArticle.titles());
-            console.log(wikiArticle.articles());
-            console.log(wikiArticle.urls());
         }
     });
   }
@@ -225,17 +222,19 @@ $(function(){
   };
 
   var wikiArticle = {
-    titles: ko.observableArray([]),
-    articles: ko.observableArray([]),
-    urls: ko.observableArray([]),
+    titles: ko.observable(''),
+    articles: ko.observable(''),
+    urls: ko.observable(''),
     update: function(titles, articles, urls){
-      this.titles.removeAll();
-      this.articles.removeAll();
-      this.urls.removeAll();
-      for (var i = 0; i < titles.length && i < 3; i++) {
-        this.titles.push(titles[i]);
-        this.articles.push(articles[i]);
-        this.urls.push(urls[i]);
+      console.log(titles);
+      if (titles.length > 0) {
+        this.titles(titles[0]);
+        this.articles(articles[0]);
+        this.urls(urls[0]);
+      } else {
+        this.titles('Sorry!');
+        this.articles('Could not find information about this in item wikipedia!');
+        this.urls('');
       }
     }
   };
