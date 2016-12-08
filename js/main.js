@@ -249,6 +249,7 @@ $(function(){
     var self = this;
     self.locations = locations;
     self.wikiArticle = wikiArticle;
+    self.closedSearch = ko.observable(false);
     self.filteredList = locations.filteredList;
     self.locations.get(); // makes the JSON call to get locations info
     self.query = ko.observable('');
@@ -262,6 +263,9 @@ $(function(){
     };
     self.hideWikiSection = function(){
       self.wikiArticle.clear();
+    }
+    self.closeSearch = function(){
+      self.closedSearch(!self.closedSearch());
     }
   };
   ko.applyBindings( new ViewModel());

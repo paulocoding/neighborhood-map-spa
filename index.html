@@ -13,8 +13,10 @@
   </head>
   <body>
     <main>
-      <div class="list">
+      <div class="list" data-bind="css: { closed: closedSearch() }">
+        <i class="fa fa-bars hamburger-icon" aria-hidden="true" data-bind="click: closeSearch"></i>
         <input type="text" name="" value="" class="filter" placeholder="Type to Filter" data-bind="value: query, valueUpdate: 'keyup', event: { keyup: filterArray}">
+        <i class="fa fa-search search-icon" aria-hidden="true"></i>
         <ul data-bind="foreach: filteredList">
           <li data-bind="text: name, click: $parent.showMarker"></li>
         </ul>

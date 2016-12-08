@@ -101,16 +101,28 @@ main {
   height: 100%;
 }
 div.list {
+  position: relative;
   background-color: #222;
   color: #b6b6b6;
   display: block;
   float: left;
   height: 100%;
   width: 250px;
+  margin-right: 0;
+  left: 0;
+  transition: all 1s;
 }
+
+div.list.closed {
+  left: -190px;
+  margin-right: -190px;
+}
+
 #map {
   height: 100%;
 }
+
+
 div.list input.filter {
   outline: none;
   box-sizing: border-box;
@@ -141,6 +153,7 @@ div.list input.filter:focus {
 
 div.list ul {
     list-style-type: none;
+    margin-top: -20px;
     padding: 0;
 }
 
@@ -175,6 +188,24 @@ i.close-btn {
   cursor: pointer;
 }
 
+i.search-icon {
+  position: relative;
+  top: -35px;
+  left: 215px;
+  font-size: 20px;
+}
+
+i.hamburger-icon {
+    font-size: 28px;
+    padding: 8px 20px;
+    float: right;
+    cursor: pointer;
+    color: #ddd;
+}
+
+i.hamburger-icon:hover {
+  color: #fff;
+}
 
 
 
