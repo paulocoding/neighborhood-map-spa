@@ -15,7 +15,7 @@
       <div class="list">
         <input type="text" name="" value="" class="filter" placeholder="Type to Filter" data-bind="value: query, valueUpdate: 'keyup', event: { keyup: filterArray}">
         <ul data-bind="foreach: filteredList">
-          <li data-bind="text: name"></li>
+          <li data-bind="text: name, click: $parent.showMarker"></li>
         </ul>
       </div>
       <div id="map"></div>

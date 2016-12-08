@@ -1,3 +1,5 @@
+'use strict';
+
 // setting up google maps
 var map;
 var mapcenter = {lat: 53.340, lng: -6.260};
@@ -13,7 +15,7 @@ function initMap() {
 // main app
 $(function(){
 
-  // animates marker
+  // Animates a given marker
   function markerAnim(marker){
     marker.infowindow.open(map, marker);
     marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -92,7 +94,7 @@ $(function(){
   var ClientSecret = 'RINKPCMKRQFYL0FR04SZJE5CMPWYT315DQDXRSCGOSQB4FKX';
   function foursquareJsonUrl(id, secret, lat, lng, radius, limit){
 
-    url = 'https://api.foursquare.com/v2/venues/search?ll='+ lat+','+ lng+
+    var url = 'https://api.foursquare.com/v2/venues/search?ll='+ lat+','+ lng+
           '&radius='+ radius+
           '&limit='+ limit+
           '&client_id='+ id+
@@ -101,7 +103,7 @@ $(function(){
     return url;
   }
 
-  // gets locations from foursquare using an ajax json call
+  // Gets locations from foursquare using an ajax json call
   // and pushes them to the given lists
   // locationList serves as cache
   // filteredList serves as view model list
@@ -147,12 +149,42 @@ $(function(){
         markersList.push(marker);
       });
     }).fail(function() {
-      // TO DO: handle error
+      // TO DO: handle errors
       console.log( 'An error ocurred' );
     });
   }
 
+  // load wikipedia data
+  function loadWikiFor(item, wikiArticle){
+    var query = item.name;
+    var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+
+                  query + '&format=json&callback=wikiCallback';
+
+    var wikiRequestTimeout = setTimeout(function(){
+        // TO DO: handle errors
+        console.log( 'An error ocurred' );
+    }, 8000);
+
+    $.ajax({
+        url: wikiUrl,
+        dataType: "jsonp",
+        jsonp: "callback",
+        success: function( response ) {
+            var titles = response[1];
+            var articles = response[2];
+            var urls = response[3];
+            wikiArticle.update(titles, articles, urls);
+            clearTimeout(wikiRequestTimeout);
+            console.log(wikiArticle.titles());
+            console.log(wikiArticle.articles());
+            console.log(wikiArticle.urls());
+        }
+    });
+  }
+
+  //
   // Knockout
+  //
   // Models
   var locations = {
     locationList: ko.observableArray([]),
@@ -163,16 +195,47 @@ $(function(){
                         this.markersList);
     },
     filter: function(filter){
-      self = this;
+      var self = this;
       self.filteredList.removeAll();
       // sets all markers not visible
       clearMarkers(this.markersList());
       for (var i = 0; i < self.locationList().length; i++) {
-        el = self.locationList()[i];
+        var el = self.locationList()[i];
         if(el.name.toLowerCase().indexOf(filter) > -1){
           self.filteredList.push(el);
-          showMarker(this.markersList()[i]);
+          showMarker(self.markersList()[i]);
         }
+      }
+    },
+    activateMarker: function(el){
+      var self = this;
+      locations = self.locationList();
+      var found = false;
+      var itemIndex = -1;
+      for (var i = 0; i < locations.length && !found; i++) {
+        if(el.lat === locations[i].lat && el.lng === locations[i].lng){
+          found = true;
+          itemIndex = i;
+        }
+      }
+      if (found){
+        markerAnim(self.markersList()[itemIndex]);
+      }
+    }
+  };
+
+  var wikiArticle = {
+    titles: ko.observableArray([]),
+    articles: ko.observableArray([]),
+    urls: ko.observableArray([]),
+    update: function(titles, articles, urls){
+      this.titles.removeAll();
+      this.articles.removeAll();
+      this.urls.removeAll();
+      for (var i = 0; i < titles.length && i < 3; i++) {
+        this.titles.push(titles[i]);
+        this.articles.push(articles[i]);
+        this.urls.push(urls[i]);
       }
     }
   };
@@ -181,12 +244,17 @@ $(function(){
   var ViewModel = function(){
     var self = this;
     self.locations = locations;
+    self.wikiArticle = wikiArticle;
     self.filteredList = locations.filteredList;
     self.locations.get(); // makes the JSON call to get locations info
     self.query = ko.observable('');
     self.filterArray = function(){
       var filter = self.query().toLowerCase();
       self.locations.filter(filter);
+    };
+    self.showMarker = function(){
+      self.locations.activateMarker(this);
+      loadWikiFor(this, self.wikiArticle);
     };
   };
   ko.applyBindings( new ViewModel());
