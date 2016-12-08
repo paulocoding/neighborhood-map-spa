@@ -1,11 +1,10 @@
 // setting up google maps
 var map;
-var mapcenter = {lat: 53.349807, lng: -6.260225};
+var mapcenter = {lat: 53.340, lng: -6.260};
 function initMap() {
-  var spire = {lat: 53.349807, lng: -6.260225};
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 17,
-    center: spire
+    center: mapcenter
   });
 }
 
@@ -14,26 +13,27 @@ function initMap() {
 // main app
 $(function(){
 
+  // animates marker
   function markerAnim(marker){
     marker.infowindow.open(map, marker);
     marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function(){marker.setAnimation(null);}, 1400);
   }
   // Creates markers on the map for given item
-  function createMarker(item){
+  function createMarker(item, markersList){
     var marker = new google.maps.Marker({
       position: {lat: item.lat, lng: item.lng},
       map: map
     });
 
-    // info window
+    // creating info window
     var contentString = '</div>'+
               '<h1 id="firstHeading" class="firstHeading">'+item.name+'</h1>'+
               '<div id="bodyContent">'+
               '<p>'+item.category+'</p>'+
-              '<p>'+item.address+'</p>'+
-              '<p>'+item.city+'</p>'+
-              '<p>'+item.country+'</p>';
+              '<p><span>'+item.address+'</p>'+
+              '<p><span>'+item.city+' </span>'+
+              '<span>'+item.country+'</span></p>';
 
       var infowindow = new google.maps.InfoWindow({
         content: contentString,
@@ -43,6 +43,26 @@ $(function(){
       marker.addListener('click', function() {
         markerAnim(marker);
       });
+      return marker;
+  }
+  // Sets the map on all markers in the markers array.
+  function setMapOnAll(markers, map) {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+  }
+
+  // Removes the markers from the map, but keeps them in the markers array.
+  function clearMarkers(markers) {
+    setMapOnAll(markers, null);
+  }
+  // Removes the given marker from the map.
+  function clearMarker(marker) {
+    marker.setMap(null);
+  }
+
+  function showMarker(marker){
+    marker.setMap(map);
   }
 
   // date format Helper
@@ -85,7 +105,7 @@ $(function(){
   // and pushes them to the given lists
   // locationList serves as cache
   // filteredList serves as view model list
-  function getFoursquareList(locationList, filteredList){
+  function getFoursquareList(locationList, filteredList, markersList){
     var foursquareUrl = foursquareJsonUrl(ClientID, ClientSecret,
                                           mapcenter.lat, mapcenter.lng,
                                           10000, 10);
@@ -123,7 +143,8 @@ $(function(){
 
         locationList.push(location);
         filteredList.push(location);
-        createMarker(location);
+        var marker = createMarker(location, markersList);
+        markersList.push(marker);
       });
     }).fail(function() {
       // TO DO: handle error
@@ -136,17 +157,23 @@ $(function(){
   var locations = {
     locationList: ko.observableArray([]),
     filteredList: ko.observableArray([]),
+    markersList: ko.observableArray([]),
     get: function(){
-      getFoursquareList(this.locationList, this.filteredList);
+      getFoursquareList(this.locationList, this.filteredList,
+                        this.markersList);
     },
     filter: function(filter){
       self = this;
       self.filteredList.removeAll();
-      self.locationList().forEach(function(el){
+      // sets all markers not visible
+      clearMarkers(this.markersList());
+      for (var i = 0; i < self.locationList().length; i++) {
+        el = self.locationList()[i];
         if(el.name.toLowerCase().indexOf(filter) > -1){
           self.filteredList.push(el);
+          showMarker(this.markersList()[i]);
         }
-      });
+      }
     }
   };
 

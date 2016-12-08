@@ -127,16 +127,16 @@ div.list input.filter:focus {
   background-color: #fff;
 }
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #6b6b6b;
+  color: #949494;
 }
 ::-moz-placeholder { /* Firefox 19+ */
-  color: #6b6b6b;
+  color: #949494;
 }
 :-ms-input-placeholder { /* IE 10+ */
-  color: #6b6b6b;
+  color: #949494;
 }
 :-moz-placeholder { /* Firefox 18- */
-  color: #6b6b6b;
+  color: #949494;
 }
 
 div.list ul {
@@ -147,10 +147,12 @@ div.list ul {
 div.list li {
   font-size: 20px;
   padding: 10px 15px;
+  border-top: 3px solid #262626;
 }
 div.list li:hover{
   color: #fff;
-  background-color: #555;
+  background-color: #628ea7;
+  border-top: 3px solid #87acc2;
   cursor: pointer;
 }
 
