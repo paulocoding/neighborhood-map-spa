@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSS files -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:600|Source+Sans+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
@@ -19,13 +20,16 @@
         </ul>
       </div>
       <div id="map"></div>
-      <section class="wiki">
-        <article class="wiki-article">
-          <h2 data-bind="text: wikiArticle.titles"></h2>
-          <p data-bind="text: wikiArticle.articles">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
-          <a href="" data-bind="text: wikiArticle.urls, attr: {href: wikiArticle.urls()[0]}">wikipedia link</a>
-        </article>
-      </section>
+      <div data-bind="if: wikiArticle.title">
+        <section class="wiki">
+          <article class="wiki-article">
+            <i class="fa fa-times-circle close-btn" aria-hidden="true" data-bind="click: hideWikiSection"></i>
+            <h2 data-bind="text: wikiArticle.title"></h2>
+            <p data-bind="text: wikiArticle.article"></p>
+            <a href="" data-bind="text: wikiArticle.url, attr: {href: wikiArticle.url()}"></a>
+          </article>
+        </section>
+      </div>
     </main>
 
     <!-- javascript files -->

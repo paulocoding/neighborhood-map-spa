@@ -222,20 +222,25 @@ $(function(){
   };
 
   var wikiArticle = {
-    titles: ko.observable(''),
-    articles: ko.observable(''),
-    urls: ko.observable(''),
+    title: ko.observable(''),
+    article: ko.observable(''),
+    url: ko.observable(''),
     update: function(titles, articles, urls){
       console.log(titles);
       if (titles.length > 0) {
-        this.titles(titles[0]);
-        this.articles(articles[0]);
-        this.urls(urls[0]);
+        this.title(titles[0]);
+        this.article(articles[0]);
+        this.url(urls[0]);
       } else {
-        this.titles('Sorry!');
-        this.articles('Could not find information about this in item wikipedia!');
-        this.urls('');
+        this.title('Sorry!');
+        this.article('Could not find information about this in item wikipedia!');
+        this.url('');
       }
+    },
+    clear: function(){
+        this.title('');
+        this.article('');
+        this.url('');
     }
   };
 
@@ -255,6 +260,9 @@ $(function(){
       self.locations.activateMarker(this);
       loadWikiFor(this, self.wikiArticle);
     };
+    self.hideWikiSection = function(){
+      self.wikiArticle.clear();
+    }
   };
   ko.applyBindings( new ViewModel());
 });

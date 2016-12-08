@@ -158,11 +158,21 @@ div.list li:hover{
 
 section.wiki {
   position: absolute;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
   background-color: #fff;
   bottom: 0;
   padding-left: 20px;
   padding-bottom: 20px;
   width: 100%;
+}
+
+i.close-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 28px;
+  cursor: pointer;
 }
 
 
