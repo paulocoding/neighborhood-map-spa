@@ -215,7 +215,15 @@ i.hamburger-icon:hover {
   color: #fff;
 }
 
-
+div.error {
+  display: block;
+  position: absolute;
+  top: 40px;
+  width: auto;
+  padding: 0 20px;
+  right: 10%;
+  background-color: #f06f5d;
+}
 
 
 
