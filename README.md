@@ -1,5 +1,8 @@
 # Neighborhood Map
 ## A single page web application that displays information about a Neighborhood.
+This application loads data from Foursquare about popular locations in a given
+place and displays them on a map. It also retrieves information from Wikipedia
+for each location if an entry for it is found.
 
 ### frontend :
 HTML5 Boilerplate, html5, css3, font-awesome, jquery, knockout
