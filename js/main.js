@@ -1,5 +1,8 @@
 'use strict';
 
+// total number of locations to load from foursquare
+var TOTAL_LOCATIONS = 12;
+
 // setting up google maps
 var map;
 var mapcenter = {lat: 53.340, lng: -6.260};
@@ -22,7 +25,7 @@ $(function(){
     setTimeout(function(){marker.setAnimation(null);}, 1400);
   }
   // Creates markers on the map for given item
-  function createMarker(item, markersList){
+  function createMarker(item, markersList, wikiArticle){
     var marker = new google.maps.Marker({
       position: {lat: item.lat, lng: item.lng},
       map: map
@@ -44,6 +47,7 @@ $(function(){
       marker.infowindow = infowindow;
       marker.addListener('click', function() {
         markerAnim(marker);
+        loadWikiFor(item, wikiArticle);
       });
       return marker;
   }
@@ -90,8 +94,6 @@ $(function(){
   }
 
   // foursquare api
-  var ClientID = 'W3HFAQKBHHUMH5DHJNSXUR4RQFXLTVGVHJA4ODOMYWSZCJQT';
-  var ClientSecret = 'RINKPCMKRQFYL0FR04SZJE5CMPWYT315DQDXRSCGOSQB4FKX';
   function foursquareJsonUrl(id, secret, lat, lng, radius, limit){
 
     var url = 'https://api.foursquare.com/v2/venues/search?ll='+ lat+','+ lng+
@@ -107,10 +109,15 @@ $(function(){
   // and pushes them to the given lists
   // locationList serves as cache
   // filteredList serves as view model list
-  function getFoursquareList(locationList, filteredList, markersList){
+  function getFoursquareList(locations, callback){
+    var ClientID = 'W3HFAQKBHHUMH5DHJNSXUR4RQFXLTVGVHJA4ODOMYWSZCJQT';
+    var ClientSecret = 'RINKPCMKRQFYL0FR04SZJE5CMPWYT315DQDXRSCGOSQB4FKX';
+
+    var locationList = locations.locationList;
+    var filteredList = locations.filteredList;
     var foursquareUrl = foursquareJsonUrl(ClientID, ClientSecret,
                                           mapcenter.lat, mapcenter.lng,
-                                          10000, 10);
+                                          10000, TOTAL_LOCATIONS);
     // json call
     $.getJSON(foursquareUrl, function(data){
       data.response.venues.forEach(function(el){
@@ -142,12 +149,10 @@ $(function(){
         }
         location.lat = el.location.lat;
         location.lng = el.location.lng;
-
         locationList.push(location);
         filteredList.push(location);
-        var marker = createMarker(location, markersList);
-        markersList.push(marker);
       });
+      callback();
     }).fail(function() {
       // TO DO: handle errors
       console.log( 'An error ocurred' );
@@ -187,10 +192,6 @@ $(function(){
     locationList: ko.observableArray([]),
     filteredList: ko.observableArray([]),
     markersList: ko.observableArray([]),
-    get: function(){
-      getFoursquareList(this.locationList, this.filteredList,
-                        this.markersList);
-    },
     filter: function(filter){
       var self = this;
       self.filteredList.removeAll();
@@ -250,7 +251,19 @@ $(function(){
     self.wikiArticle = wikiArticle;
     self.closedSearch = ko.observable(false);
     self.filteredList = locations.filteredList;
-    self.locations.get(); // makes the JSON call to get locations info
+
+    // to be used as a callback after the foursquare data is loaded
+    // creates google's map markers and sets click event
+    self.createMarkers = function(){
+      var markersList = self.locations.markersList;
+      self.locations.locationList().forEach(function(location){
+        var marker = createMarker(location, markersList, self.wikiArticle);
+        markersList.push(marker);
+      });
+    };
+
+    // makes the JSON call and fills in the locations
+    getFoursquareList(self.locations, self.createMarkers);
     self.query = ko.observable('');
     self.filterArray = function(){
       var filter = self.query().toLowerCase();
