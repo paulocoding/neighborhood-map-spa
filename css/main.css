@@ -184,7 +184,7 @@ section.wiki {
   background-color: #fff;
   bottom: 0;
   padding-left: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 50px;
   width: 100%;
 }
 
@@ -225,9 +225,21 @@ div.error {
   background-color: #f06f5d;
 }
 
+footer {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #222;
+    margin: 0px;
+    color: #ddd;
+    text-align: center;
+}
 
-
-
+footer p {
+  margin: 2px;
+}
 
 
 
