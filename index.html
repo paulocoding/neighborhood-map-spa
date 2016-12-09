@@ -34,10 +34,12 @@
       </div>
     </main>
 
-    <div class="error">
-      <i class="fa fa-times-circle close-btn" aria-hidden="true"></i>
-      <h2>Error</h2>
-      <p>There was a problem loading data from wikipedia. <i class="fa fa-frown-o" aria-hidden="true"></i></p>
+    <div data-bind="if: error.show">
+      <div class="error">
+        <i class="fa fa-times-circle close-btn" aria-hidden="true" data-bind="click: hideErrorWindow"></i>
+        <h2>Error</h2>
+        <p data-bind="text: error.message"><i class="fa fa-frown-o" aria-hidden="true"></i></p>
+      </div>
     </div>
 
     <!-- javascript files -->

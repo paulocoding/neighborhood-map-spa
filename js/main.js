@@ -25,7 +25,7 @@ $(function(){
     setTimeout(function(){marker.setAnimation(null);}, 1400);
   }
   // Creates markers on the map for given item
-  function createMarker(item, markersList, wikiArticle){
+  function createMarker(item, markersList, wikiArticle, error){
     var marker = new google.maps.Marker({
       position: {lat: item.lat, lng: item.lng},
       map: map
@@ -47,7 +47,7 @@ $(function(){
       marker.infowindow = infowindow;
       marker.addListener('click', function() {
         markerAnim(marker);
-        loadWikiFor(item, wikiArticle);
+        loadWikiFor(item, wikiArticle, error);
       });
       return marker;
   }
@@ -109,7 +109,7 @@ $(function(){
   // and pushes them to the given lists
   // locationList serves as cache
   // filteredList serves as view model list
-  function getFoursquareList(locations, callback){
+  function getFoursquareList(locations, callback, error){
     var ClientID = 'W3HFAQKBHHUMH5DHJNSXUR4RQFXLTVGVHJA4ODOMYWSZCJQT';
     var ClientSecret = 'RINKPCMKRQFYL0FR04SZJE5CMPWYT315DQDXRSCGOSQB4FKX';
 
@@ -154,20 +154,20 @@ $(function(){
       });
       callback();
     }).fail(function() {
-      // TO DO: handle errors
-      console.log( 'An error ocurred' );
+      error.show(true);
+      error.message('There was a problem loading data from foursquare. ');
     });
   }
 
   // load wikipedia data
-  function loadWikiFor(item, wikiArticle){
+  function loadWikiFor(item, wikiArticle, error){
     var query = item.name;
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+
                   query + '&format=json&callback=wikiCallback';
 
     var wikiRequestTimeout = setTimeout(function(){
-        // TO DO: handle errors
-        console.log( 'An error ocurred' );
+      error.show(true);
+      error.message('There was a problem loading data from wikipedia. ');
     }, 8000);
 
     $.ajax({
@@ -244,6 +244,11 @@ $(function(){
     }
   };
 
+  var error = {
+    show: ko.observable(false),
+    message: ko.observable('')
+  };
+
   // View Model
   var ViewModel = function(){
     var self = this;
@@ -251,19 +256,23 @@ $(function(){
     self.wikiArticle = wikiArticle;
     self.closedSearch = ko.observable(false);
     self.filteredList = locations.filteredList;
+    self.error = error;
 
     // to be used as a callback after the foursquare data is loaded
     // creates google's map markers and sets click event
     self.createMarkers = function(){
       var markersList = self.locations.markersList;
       self.locations.locationList().forEach(function(location){
-        var marker = createMarker(location, markersList, self.wikiArticle);
+        var marker = createMarker(location,
+                                  markersList,
+                                  self.wikiArticle,
+                                  self.error);
         markersList.push(marker);
       });
     };
 
     // makes the JSON call and fills in the locations
-    getFoursquareList(self.locations, self.createMarkers);
+    getFoursquareList(self.locations, self.createMarkers, self.error);
     self.query = ko.observable('');
     self.filterArray = function(){
       var filter = self.query().toLowerCase();
@@ -271,7 +280,7 @@ $(function(){
     };
     self.showMarker = function(){
       self.locations.activateMarker(this);
-      loadWikiFor(this, self.wikiArticle);
+      loadWikiFor(this, self.wikiArticle, self.error);
     };
     self.hideWikiSection = function(){
       self.wikiArticle.clear();
@@ -279,6 +288,9 @@ $(function(){
     self.closeSearch = function(){
       self.closedSearch(!self.closedSearch());
     };
+    self.hideErrorWindow = function(){
+      self.error.show(false);
+    }
   };
   ko.applyBindings( new ViewModel());
 });
