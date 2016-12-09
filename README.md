@@ -27,5 +27,5 @@ google maps, Foursquare, Wikipedia
   ```
     $ python -m SimpleHTTPServer
   ```
-  * Then this link on a browser to use the application:
-    * localhost:8000
+  * Then open this link on a browser to use the application:
+    * http://localhost:8000/
