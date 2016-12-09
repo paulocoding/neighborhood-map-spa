@@ -226,7 +226,6 @@ $(function(){
     article: ko.observable(''),
     url: ko.observable(''),
     update: function(titles, articles, urls){
-      console.log(titles);
       if (titles.length > 0) {
         this.title(titles[0]);
         this.article(articles[0]);
@@ -263,10 +262,10 @@ $(function(){
     };
     self.hideWikiSection = function(){
       self.wikiArticle.clear();
-    }
+    };
     self.closeSearch = function(){
       self.closedSearch(!self.closedSearch());
-    }
+    };
   };
   ko.applyBindings( new ViewModel());
 });
