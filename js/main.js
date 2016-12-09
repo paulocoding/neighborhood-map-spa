@@ -176,11 +176,6 @@ function loadWikiFor(item, wikiArticle, error){
   var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+
                 query + '&format=json&callback=wikiCallback';
 
-  var wikiRequestTimeout = setTimeout(function(){
-    error.show(true);
-    error.message('There was a problem loading data from wikipedia. ');
-  }, 8000);
-
   $.ajax({
       url: wikiUrl,
       dataType: "jsonp",
@@ -190,8 +185,10 @@ function loadWikiFor(item, wikiArticle, error){
           var articles = response[2];
           var urls = response[3];
           wikiArticle.update(titles, articles, urls);
-          clearTimeout(wikiRequestTimeout);
       }
+  }).fail(function(){
+      error.show(true);
+      error.message('There was a problem loading data from wikipedia. ');
   });
 }
 
