@@ -18,13 +18,14 @@ function initMap() {
 // main app
 $(function(){
 
-  // Animates a given marker
+  // Animates a given marker and displays infowindow
   function markerAnim(marker){
     marker.infowindow.open(map, marker);
     marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function(){marker.setAnimation(null);}, 1400);
   }
-  // Creates markers on the map for given item
+
+  // Creates a marker on the map for a given item
   function createMarker(item, markersList, wikiArticle, error){
     var marker = new google.maps.Marker({
       position: {lat: item.lat, lng: item.lng},
@@ -51,6 +52,7 @@ $(function(){
       });
       return marker;
   }
+
   // Sets the map on all markers in the markers array.
   function setMapOnAll(markers, map) {
     for (var i = 0; i < markers.length; i++) {
@@ -62,11 +64,13 @@ $(function(){
   function clearMarkers(markers) {
     setMapOnAll(markers, null);
   }
+
   // Removes the given marker from the map.
   function clearMarker(marker) {
     marker.setMap(null);
   }
 
+  // Sets the given marker in the map.
   function showMarker(marker){
     marker.setMap(map);
   }
@@ -159,7 +163,7 @@ $(function(){
     });
   }
 
-  // load wikipedia data
+  // load wikipedia data for a given item (search by name)
   function loadWikiFor(item, wikiArticle, error){
     var query = item.name;
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+
@@ -184,7 +188,6 @@ $(function(){
     });
   }
 
-  //
   // Knockout
   //
   // Models
@@ -227,6 +230,8 @@ $(function(){
     article: ko.observable(''),
     url: ko.observable(''),
     update: function(titles, articles, urls){
+      // it shows the first item from the wikipedia results
+      // or a message if a wikipedia article is not found
       if (titles.length > 0) {
         this.title(titles[0]);
         this.article(articles[0]);
