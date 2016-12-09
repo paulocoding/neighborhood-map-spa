@@ -67,17 +67,19 @@ function setMapOnAll(markers, map) {
 
 // Removes the markers from the map, but keeps them in the markers array.
 function clearMarkers(markers) {
-  setMapOnAll(markers, null);
+  markers.forEach(function(m){
+    m.setVisible(false);
+  })
 }
 
 // Removes the given marker from the map.
 function clearMarker(marker) {
-  marker.setMap(null);
+  marker.setVisible(false);
 }
 
 // Sets the given marker in the map.
 function showMarker(marker){
-  marker.setMap(map);
+  marker.setVisible(true);
 }
 
 // date format Helper
